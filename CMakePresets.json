@@ -1,0 +1,160 @@
+{
+	"version": 6,
+	"include": [
+		"tools/cmake/presets/base.json",
+		"tools/cmake/presets/checks.json",
+		"tools/cmake/presets/compilers.json",
+		"tools/cmake/presets/generators.json",
+		"tools/cmake/presets/platforms.json",
+		"tools/cmake/presets/sanitizer_workflows.json"
+	],
+	"configurePresets": [
+		{
+			"name": "dev-default",
+			"displayName": "Default configuration for developers",
+			"binaryDir": "build/dev",
+			"inherits": [
+				"ci-linux-clang-ninja",
+				"ci-windows-vs2022-cl-ninja"
+			]
+		},
+		{
+			"name": "ci-windows-vs2022-cl-ninja",
+			"displayName": "Windows VisualStudio 2022",
+			"binaryDir": "build/${presetName}",
+			"inherits": [
+				"base",
+				"windows",
+				"vs2022",
+				"ninja"
+			]
+		},
+		{
+			"name": "ci-windows-vs2022-clang-ninja",
+			"displayName": "Windows VisualStudio 2022 Clang",
+			"binaryDir": "build/${presetName}",
+			"inherits": [
+				"base",
+				"windows",
+				"vs2022-clang",
+				"ninja"
+			]
+		},
+		{
+			"name": "ci-linux-clang-ninja",
+			"displayName": "Linux Clang ",
+			"binaryDir": "build/${presetName}",
+			"inherits": [
+				"base",
+				"linux",
+				"clang",
+				"ninja"
+			]
+		},
+		{
+			"name": "ci-linux-gcc-ninja",
+			"displayName": "Linux GCC ",
+			"binaryDir": "build/${presetName}",
+			"inherits": [
+				"base",
+				"linux",
+				"gcc",
+				"ninja"
+			]
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "ci-windows-vs2022-cl-ninja",
+			"displayName": "Windows VisualStudio 2022",
+			"configurePreset": "ci-windows-vs2022-cl-ninja",
+			"targets": "all"
+		},
+		{
+			"name": "ci-windows-vs2022-clang-ninja",
+			"displayName": "Windows VisualStudio 2022 Clang",
+			"configurePreset": "ci-windows-vs2022-clang-ninja",
+			"targets": "all"
+		},
+		{
+			"name": "ci-linux-clang-ninja",
+			"hidden": true,
+			"displayName": "Linux Clang ",
+			"configurePreset": "ci-linux-clang-ninja",
+			"targets": "all"
+		},
+		{
+			"name": "ci-linux-clang-ninja-debug",
+			"displayName": "Linux Clang Debug",
+			"inherits": ["ci-linux-clang-ninja"],
+			"configuration": "Debug"
+		},
+		{
+			"name": "ci-linux-clang-ninja-release",
+			"displayName": "Linux Clang Release",
+			"inherits": ["ci-linux-clang-ninja"],
+			"configuration": "Release"
+		},
+		{
+			"name": "ci-linux-gcc-ninja",
+			"displayName": "Linux GCC ",
+			"configurePreset": "ci-linux-gcc-ninja",
+			"targets": "all"
+		}
+	],
+	"testPresets": [
+		{
+			"name": "ci-test-base",
+			"hidden": true,
+			"output": {
+				"outputOnFailure": true,
+				"outputJUnitFile": "${presetName}-report.xml"
+			}
+		},
+		{
+			"name": "ci-linux-clang-ninja-test",
+			"hidden": true,
+			"inherits": ["ci-test-base"],
+			"configurePreset": "ci-linux-clang-ninja"
+		},
+		{
+			"name": "ci-linux-clang-ninja-test-debug",
+			"inherits": ["ci-linux-clang-ninja-test"],
+			"configuration": "Debug"
+		},
+		{
+			"name": "ci-linux-clang-ninja-test-release",
+			"inherits": ["ci-linux-clang-ninja-test"],
+			"configuration": "Release"
+		}
+	],
+	"packagePresets": [
+		{
+			"name": "ci-linux-clang-ninja-package",
+			"configurePreset": "ci-linux-clang-ninja",
+			"configurations": ["Release"],
+			"generators": ["TGZ"]
+		}
+	],
+	"workflowPresets": [
+		{
+			"name": "ci-linux-clang-ninja-unit-test",
+			"displayName": "Configure, build, and test on Linux with Clang",
+			"steps": [
+				{ "type": "configure", "name": "ci-linux-clang-ninja" },
+				{ "type": "build",     "name": "ci-linux-clang-ninja-debug" },
+				{ "type": "test",      "name": "ci-linux-clang-ninja-test-debug" }
+			]
+		},
+		{
+			"name": "ci-linux-clang-ninja-package",
+			"displayName": "Configure, build, test, and package on Linux with Clang",
+			"steps": [
+				{ "type": "configure", "name": "ci-linux-clang-ninja" },
+				{ "type": "build",     "name": "ci-linux-clang-ninja-release" },
+				{ "type": "test",      "name": "ci-linux-clang-ninja-test-release" },
+				{ "type": "package",   "name": "ci-linux-clang-ninja-package" }
+			]
+		}
+	]
+}
