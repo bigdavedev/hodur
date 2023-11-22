@@ -15,8 +15,11 @@ set (
 	-Wno-c++20-compat
 	-Wno-padded
 	-Wno-exit-time-destructors
+	-stdlib=libc++
 )
 
 foreach (flag IN LISTS COMPILER_FLAGS_LIST)
 	string (APPEND CMAKE_CXX_FLAGS_INIT "${flag} ")
 endforeach ()
+
+set (CMAKE_EXE_LINKER_FLAGS_INIT "-stdlib=libc++ -lc++abi")

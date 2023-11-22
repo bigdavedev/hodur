@@ -22,7 +22,7 @@ option (HODUR_BUILD_DOCS "Build the documentation" ${PROJECT_IS_TOP_LEVEL})
 option (HODUR_ENABLE_TESTING "Build the test suite" ${PROJECT_IS_TOP_LEVEL})
 option (HODUR_ENABLE_INSTALL "Enable packaging support" ${PROJECT_IS_TOP_LEVEL})
 
-#set (CMAKE_COMPILE_WARNING_AS_ERROR ${PROJECT_IS_TOP_LEVEL})
+set (CMAKE_COMPILE_WARNING_AS_ERROR ${PROJECT_IS_TOP_LEVEL})
 set (BUILD_SHARED_LIBS TRUE)
 
 include (StageConfig)
@@ -34,6 +34,13 @@ endif ()
 
 add_library (hodur)
 add_library (Hodur::Hodur ALIAS hodur)
+
+target_compile_features (
+	hodur
+
+	PUBLIC
+	cxx_std_23
+)
 
 generate_export_header (
 	hodur

@@ -1,0 +1,47 @@
+name: Pages
+on:
+  push:
+    branches:
+      - 'master'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+    url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - name: Setup C++
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: llvm-17
+          cmake: true
+          ninja: true
+          conan: '2.0.14'
+          doxygen: true
+          graphviz: true
+      - name: Generate Documentation
+        run: cmake --workflow --preset ci-documentation
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: 'build/ci-documentation/docs/html/'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
