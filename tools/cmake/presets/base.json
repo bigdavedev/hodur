@@ -16,6 +16,26 @@
 				"CMAKE_PROJECT_TOP_LEVEL_INCLUDES": {
 					"type": "STRING",
 					"value": "tools/conan/cmake-conan/conan_provider.cmake"
+				},
+				"CMAKE_CXX_STANDARD_REQUIRED": {
+					"type": "BOOL",
+					"value": "TRUE"
+				},
+				"CMAKE_CXX_EXTENSIONS": {
+					"type": "BOOL",
+					"value": "FALSE"
+				},
+				"HODUR_BUILD_EXAMPLES": {
+					"type": "BOOL",
+					"value": "FALSE"
+				},
+				"HODUR_BUILD_DOCS": {
+					"type": "BOOL",
+					"value": "FALSE"
+				},
+				"HODUR_ENABLE_INSTALL": {
+					"type": "BOOL",
+					"value": "FALSE"
 				}
 			}
 		}

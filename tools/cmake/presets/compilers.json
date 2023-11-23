@@ -7,7 +7,7 @@
 			"cacheVariables": {
 				"CMAKE_TOOLCHAIN_FILE": {
 					"type": "STRING",
-					"value": "tools/cmake/toolchains/cl.toolchain.cmake"
+					"value": "tools/cmake/toolchains/visual-studio-cl.toolchain.cmake"
 				}
 			},
 			"toolset": {
